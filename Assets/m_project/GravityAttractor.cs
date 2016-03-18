@@ -6,7 +6,7 @@ public class GravityAttractor : MonoBehaviour {
 
 	public float gravity = -9.8f;
 	public float gravityRange = 6;
-	public float atmosphereRadiouse = 100;
+	public float atmosphereRadiouse = 10;
 
 	public void Attract(Rigidbody body) {
 		Vector3 gravityUp = (body.position - transform.position).normalized;
@@ -29,6 +29,12 @@ public class GravityAttractor : MonoBehaviour {
 
 	}  
 
+	void OnDrawGizmosSelected() {
+		Gizmos.color = Color.cyan;
+		Gizmos.DrawWireSphere(transform.position, atmosphereRadiouse);
+		Gizmos.color = Color.yellow;
+		Gizmos.DrawWireSphere(transform.position, gravityRange);
+	}
 
 	public void atmBreak(Rigidbody body){
 		float atmBreaking = 3;
