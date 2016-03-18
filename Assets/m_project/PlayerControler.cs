@@ -69,7 +69,7 @@ public class PlayerControler : MonoBehaviour {
 		rigidbody.MovePosition(rigidbody.position + localMove);
 
 		// jetpack
-		if (Input.GetButton("Submit")) {
+		if (Input.GetButton("Submit") && rigidbody.velocity.magnitude < 2) {
 			rigidbody.AddForce(transform.up.normalized * 15);
 		}
 	}
