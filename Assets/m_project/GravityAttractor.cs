@@ -13,11 +13,22 @@ public class GravityAttractor : MonoBehaviour {
 		Vector3 gravityUp = (body.position - transform.position).normalized;
 		Vector3 localUp = body.transform.up;
 
-		// Apply downwards gravity to body
-		body.AddForce(gravityUp * gravity);
-
 
 		float distance = Vector3.Distance (transform.position, body.transform.position);
+
+
+		// Apply downwards gravity to body
+		float gravityForce;
+
+		if(distance < gravityRange){
+			gravityForce = gravity;
+		} else {
+			gravityForce = gravity / (1 + distance - gravityRange);
+		}
+
+
+		body.AddForce(gravityUp * gravityForce);
+
 
 		if(distance < atmosphereRadiouse){
 			atmBreak (body);
