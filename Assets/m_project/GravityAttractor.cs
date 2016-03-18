@@ -6,6 +6,7 @@ public class GravityAttractor : MonoBehaviour {
 
 	public float gravity = -9.8f;
 	public float gravityRange = 6;
+	public float planetSurface = 4;
 	public float atmosphereRadiouse = 10;
 
 	public void Attract(Rigidbody body) {
@@ -22,10 +23,24 @@ public class GravityAttractor : MonoBehaviour {
 			atmBreak (body);
 		}
 
+		if(distance < gravityRange){
+			// Allign bodies up axis with the centre of planet
 
-		// Allign bodies up axis with the centre of planet
-		body.rotation = Quaternion.FromToRotation(localUp,gravityUp) * body.rotation;
+			float distanceToSurface = distance - planetSurface;
 
+			if (distanceToSurface > 0) {
+				float rotationDistance = (gravityRange - planetSurface);
+				float proportion = (rotationDistance - distanceToSurface) / rotationDistance;
+
+				float angleRad = Vector3.Angle (localUp, gravityUp) * Mathf.Deg2Rad;
+
+				Vector3 newDir = Vector3.RotateTowards(localUp, gravityUp, angleRad * proportion, 0.0F);
+
+				body.rotation = Quaternion.FromToRotation (localUp, newDir) * body.rotation;
+			} else {
+				body.rotation = Quaternion.FromToRotation (localUp, gravityUp) * body.rotation;
+			}
+		}
 
 	}  
 
@@ -34,6 +49,9 @@ public class GravityAttractor : MonoBehaviour {
 		Gizmos.DrawWireSphere(transform.position, atmosphereRadiouse);
 		Gizmos.color = Color.yellow;
 		Gizmos.DrawWireSphere(transform.position, gravityRange);
+		Gizmos.color = Color.gray;
+		Gizmos.color = new Color(0.5f, 0.5f, 0.5f, 0.5F);
+		Gizmos.DrawSphere(transform.position, planetSurface);
 	}
 
 	public void atmBreak(Rigidbody body){
