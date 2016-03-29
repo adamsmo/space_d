@@ -6,8 +6,6 @@ using AssemblyCSharp;
 [RequireComponent (typeof (Rigidbody))]
 public class GravityBody : MonoBehaviour {
 
-	public GameObject[] atractors;
-
 	GravityAttractor planet;
 	new Rigidbody rigidbody;
 
@@ -28,20 +26,9 @@ public class GravityBody : MonoBehaviour {
 	}
 
 	void selectPlanet(){
-		atractors = GameObject.FindGameObjectsWithTag ("Planet");
+		GameObject[] atractors = GameObject.FindGameObjectsWithTag ("Planet");
 
-		GameObject atractor = Utils.fold<GameObject>(
-			(first, second) => {
-				float distanceFirst = Vector3.Distance(first.transform.position, this.transform.position);
-				float distanceSecond = Vector3.Distance(second.transform.position, this.transform.position);
-
-				if(distanceFirst>distanceSecond){
-					return second;
-				}else{
-					return first;
-				}
-			}, atractors);
-
+		GameObject atractor = Utils.getNearestGameObject (atractors, this.transform);
 
 		planet = atractor.GetComponent<GravityAttractor>();
 	}

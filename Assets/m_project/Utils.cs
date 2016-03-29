@@ -1,4 +1,5 @@
-﻿using System;
+﻿using UnityEngine;
+using System;
 
 namespace AssemblyCSharp
 {
@@ -16,6 +17,21 @@ namespace AssemblyCSharp
 			}
 			return result;
 		}
+
+		public static GameObject getNearestGameObject(GameObject[] objects, Transform transform){
+			return Utils.fold<GameObject>(
+				(first, second) => {
+					float distanceFirst = Vector3.Distance(first.transform.position, transform.position);
+					float distanceSecond = Vector3.Distance(second.transform.position, transform.position);
+
+					if(distanceFirst>distanceSecond){
+						return second;
+					}else{
+						return first;
+					}
+				}, objects);
+		}
+
 	}
 }
 

@@ -9,6 +9,10 @@ public class GravityAttractor : MonoBehaviour {
 	public float planetSurface = 4;
 	public float atmosphereRadiouse = 10;
 
+	void Awake () {
+		tag = "Planet";
+	}
+
 	public void Attract(Rigidbody body) {
 		Vector3 gravityUp = (body.position - transform.position).normalized;
 		Vector3 localUp = body.transform.up;

@@ -10,6 +10,7 @@ public class PlanetOrbiting : MonoBehaviour {
 
 	void Awake () {
 		findSun();
+		tag = "Orbiting";
 	}
 
 	void FixedUpdate () {
