@@ -21,6 +21,7 @@ public class PlanetOrbiting : MonoBehaviour {
 		findSun ();
 		Handles.color = Color.red;
 		float distance = Vector3.Distance (sun.transform.position, transform.position);
+
 		Handles.DrawWireDisc(sun.transform.position, sun.transform.up, distance);
 	}
 		
