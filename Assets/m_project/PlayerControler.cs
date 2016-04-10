@@ -98,6 +98,60 @@ public class PlayerControler : MonoBehaviour {
 			Debug.Log ("rotated");
 			transform.RotateAround (sun.transform.position, sun.transform.up, planetSpeed);
 		}
+
+		planetGravity (planet);
+	}
+
+	void planetGravity(GravityAttractor planet){
+		Rigidbody body = this.rigidbody;
+		Vector3 gravityUp = (body.position - planet.transform.position).normalized;
+		Vector3 localUp = body.transform.up;
+		float distance = Vector3.Distance (planet.transform.position, this.transform.position);
+
+		if(distance < planet.gravityRange){
+			// Allign bodies up axis with the centre of planet
+
+			float distanceToSurface = distance - planet.planetSurface;
+
+			if (distanceToSurface > 0) {
+				float rotationDistance = (planet.gravityRange - planet.planetSurface);
+				float proportion = (rotationDistance - distanceToSurface) / rotationDistance;
+
+				float angleRad = Vector3.Angle (localUp, gravityUp) * Mathf.Deg2Rad;
+
+				Vector3 newDir = Vector3.RotateTowards(localUp, gravityUp, angleRad * proportion, 0.0F);
+
+				body.rotation = Quaternion.FromToRotation (localUp, newDir) * body.rotation;
+			} else {
+				body.rotation = Quaternion.FromToRotation (localUp, gravityUp) * body.rotation;
+			}
+		}
+
+		float gravityForce;
+
+		if(distance < planet.gravityRange){
+			gravityForce = planet.gravity;
+		} else {
+			gravityForce = planet.gravity / (1 + distance - planet.gravityRange);
+		}
+
+
+		body.AddForce(gravityUp * gravityForce);
+
+
+		if(distance < planet.atmosphereRadiouse){
+			atmBreak (body);
+		}
+	}
+
+	public void atmBreak(Rigidbody body){
+		float atmBreaking = 0.025f;
+		var curSpeed = body.velocity.magnitude;
+		var newSpeed = curSpeed - atmBreaking;
+		if (newSpeed < 0) {
+			newSpeed = 0;
+		}
+		body.velocity = body.velocity.normalized * newSpeed;
 	}
 
 	void findSun(){
