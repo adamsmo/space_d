@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AssemblyCSharp;
 
 [RequireComponent (typeof (GravityBody))]
 public class PlayerControler : MonoBehaviour {
@@ -20,11 +21,14 @@ public class PlayerControler : MonoBehaviour {
 	new Rigidbody rigidbody;
 
 
+	GameObject sun;
+
 	void Awake() {
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 		cameraTransform = Camera.main.transform;
 		rigidbody = GetComponent<Rigidbody> ();
+		findSun();
 	}
 
 	void Update() {
@@ -60,17 +64,43 @@ public class PlayerControler : MonoBehaviour {
 		else {
 			grounded = false;
 		}
-
 	}
 
 	void FixedUpdate() {
+		PlanetUpdate();
+
 		// Apply movement to rigidbody
 		Vector3 localMove = transform.TransformDirection(moveAmount) * Time.fixedDeltaTime;
 		rigidbody.MovePosition(rigidbody.position + localMove);
+
 
 		// jetpack
 		if (Input.GetButton("Submit") && rigidbody.velocity.magnitude < 2) {
 			rigidbody.AddForce(transform.up.normalized * 15);
 		}
+	}
+
+	void PlanetUpdate () {
+		GameObject[] orbitings = GameObject.FindGameObjectsWithTag ("Orbiting");
+		GameObject nearestOrbiting = Utils.getNearestGameObject (orbitings, this.transform);
+		float planetSpeed = nearestOrbiting.GetComponent<PlanetOrbiting> ().planetSpeed;
+
+
+		GameObject[] atractors = GameObject.FindGameObjectsWithTag ("Planet");
+		GameObject atractor = Utils.getNearestGameObject (atractors, this.transform);
+		GravityAttractor planet = atractor.GetComponent<GravityAttractor>();
+
+
+
+		float distance = Vector3.Distance (planet.transform.position, this.transform.position);
+
+		if(distance < planet.atmosphereRadiouse){
+			Debug.Log ("rotated");
+			transform.RotateAround (sun.transform.position, sun.transform.up, planetSpeed);
+		}
+	}
+
+	void findSun(){
+		sun = GameObject.FindGameObjectWithTag ("Sun");
 	}
 }
