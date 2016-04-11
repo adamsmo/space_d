@@ -2,7 +2,7 @@
 using System.Collections;
 using AssemblyCSharp;
 
-[RequireComponent (typeof (GravityBody))]
+[RequireComponent (typeof (Rigidbody))]
 public class PlayerControler : MonoBehaviour {
 
 	// public vars
@@ -29,6 +29,9 @@ public class PlayerControler : MonoBehaviour {
 		cameraTransform = Camera.main.transform;
 		rigidbody = GetComponent<Rigidbody> ();
 		findSun();
+
+		rigidbody.useGravity = false;
+		rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 	}
 
 	void Update() {
