@@ -98,7 +98,6 @@ public class PlayerControler : MonoBehaviour {
 		float distance = Vector3.Distance (planet.transform.position, this.transform.position);
 
 		if(distance < planet.atmosphereRadiouse){
-			Debug.Log ("rotated");
 			transform.RotateAround (sun.transform.position, sun.transform.up, planetSpeed);
 		}
 
