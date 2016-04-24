@@ -1,12 +1,13 @@
-﻿Shader "Unlit/grav_lens"
+﻿Shader "Unlit/fixed_grav_lens"
 {
-
-Properties {
-    _MainTex ("Base (RGB)", 2D) = "white" {}
-}
-
-SubShader {
-    Pass {
+	Properties
+	{
+		_MainTex ("Texture", 2D) = "white" {}
+	}
+	SubShader
+	{
+		
+	Pass {
         ZTest Always Cull Off ZWrite Off
         Fog { Mode off }
                 
@@ -17,10 +18,6 @@ SubShader {
         #include "UnityCG.cginc"
 
         uniform sampler2D _MainTex;
-        uniform float2 _Position;
-        uniform float _Rad;
-        uniform float _Ratio;
-        uniform float _Distance;
 
         struct v2f {
             float4 pos : POSITION;
@@ -38,6 +35,11 @@ SubShader {
         
         float4 frag (v2f i) : COLOR
         {
+        	float _Rad = 1.7;
+        	float _Ratio = 1;
+        	float _Distance = 40;
+        	float2 _Position = (0.5, 0.5);
+
             float2 offset = i.uv - _Position; // We shift our pixel to the desired position
             float2 ratio = {_Ratio,1}; // determines the aspect ratio
             float rad = length(offset / ratio); // the distance from the conventional "center" of the screen.
@@ -47,16 +49,12 @@ SubShader {
             
             offset += _Position;
             
-            half4 res = tex2D(_MainTex, offset);
-            half4 neutral = tex2D(_MainTex, i.uv);
+            float4 res = tex2D(_MainTex, offset).rgba;
             //if (rad*_Distance<pow(2*_Rad/_Distance,0.5)*_Distance) {res.g+=0.2;} // verification of compliance with the Einstein radius
-            if (rad*_Distance<_Rad){res.r=0;res.g=0;res.b=0;} // check radius BH
+            if (rad * _Distance < _Rad){res.r=0;res.g=0;res.b=0;} // check radius BH
 
-            if (false) {
-            	return res;
-            }
 
-            return neutral;
+            return res;
         }
         ENDCG
 
