@@ -8,12 +8,15 @@
 }
  
 SubShader {
+Lighting Off
     Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent"}
-    LOD 200
- Lighting Off
+
+ 
 CGPROGRAM
 #pragma surface surf Lambert alpha
- 
+//#pragma surface surf NoLighting noforwardadd
+//  Lighting Off
+
 sampler2D _MainTex;
 fixed4 _Color;
  
@@ -23,7 +26,7 @@ struct Input {
  
 void surf (Input IN, inout SurfaceOutput o) {
     fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
-    o.Albedo = c.rgb;
+    o.Emission = c.rgb;
 
     float2 center = (0.5, 0.5);
     float rad = length(IN.uv_MainTex - center);
@@ -34,6 +37,8 @@ void surf (Input IN, inout SurfaceOutput o) {
 }
 ENDCG
 }
-Fallback "Transparent/VertexLit"
+
+
+Fallback off
  
 }
