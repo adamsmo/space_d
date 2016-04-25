@@ -32,7 +32,7 @@ public class grav_lens : MonoBehaviour {
 			// Find the position of the black hole in screen coordinates
 			Vector2 pos = new Vector2(
 				this.GetComponent<Camera>().WorldToScreenPoint (BH.transform.position).x / this.GetComponent<Camera>().pixelWidth,
-				1-this.GetComponent<Camera>().WorldToScreenPoint (BH.transform.position).y / this.GetComponent<Camera>().pixelHeight);
+				this.GetComponent<Camera>().WorldToScreenPoint (BH.transform.position).y / this.GetComponent<Camera>().pixelHeight);
 
 			// Install all the required parameters for the shader
 			material.SetVector("_Position", new Vector2(pos.x, pos.y));

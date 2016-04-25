@@ -6,6 +6,9 @@ Properties {
 }
 
 SubShader {
+Tags { "RenderType"="Opaque" }
+        LOD 200
+
     Pass {
         ZTest Always Cull Off ZWrite Off
         Fog { Mode off }
@@ -23,8 +26,9 @@ SubShader {
         uniform float _Distance;
 
         struct v2f {
-            float4 pos : POSITION;
+            float4 pos : SV_POSITION;
             float2 uv : TEXCOORD0;
+            half dist : TEXCOORD1;//ugly hack
         };
 
         v2f vert( appdata_img v )
@@ -32,6 +36,7 @@ SubShader {
             v2f o;
             o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
             o.uv = v.texcoord;
+            o.dist = mul(UNITY_MATRIX_IT_MV, v.vertex).z;
             length(ObjSpaceViewDir(v.vertex));
             return o;
         }
@@ -50,6 +55,9 @@ SubShader {
             half4 res = tex2D(_MainTex, offset);
             //if (rad*_Distance<pow(2*_Rad/_Distance,0.5)*_Distance) {res.g+=0.2;} // verification of compliance with the Einstein radius
             if (rad*_Distance<_Rad){res.r=0;res.g=0;res.b=0;} // check radius BH
+
+            if(i.dist * 1000 > 99){res.r=1;}
+
 
             return res;
         }
