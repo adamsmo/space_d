@@ -21,6 +21,7 @@ SubShader {
         uniform float _Rad;
         uniform float _Ratio;
         uniform float _Distance;
+        uniform float _OutOfScreen;
 
         struct v2f {
             float4 pos : SV_POSITION;
@@ -37,6 +38,8 @@ SubShader {
         
         float4 frag (v2f i) : COLOR
         {
+        	if(_OutOfScreen > 0){return tex2D(_MainTex, i.uv);}
+
             float2 offset = i.uv - _Position; // We shift our pixel to the desired position
             float2 ratio = {_Ratio,1}; // determines the aspect ratio
             float rad = length(offset / ratio); // the distance from the conventional "center" of the screen.

@@ -34,6 +34,14 @@ public class grav_lens : MonoBehaviour {
 				this.GetComponent<Camera>().WorldToScreenPoint (BH.transform.position).x / this.GetComponent<Camera>().pixelWidth,
 				this.GetComponent<Camera>().WorldToScreenPoint (BH.transform.position).y / this.GetComponent<Camera>().pixelHeight);
 
+			Vector3 viewPos = this.GetComponent<Camera>().WorldToViewportPoint(BH.transform.position);
+
+			if (viewPos.z <= 0) {
+				material.SetFloat ("_OutOfScreen", 1);
+			} else {
+				material.SetFloat ("_OutOfScreen", 0);
+			}
+
 			// Install all the required parameters for the shader
 			material.SetVector("_Position", new Vector2(pos.x, pos.y));
 			material.SetFloat("_Ratio", ratio);
