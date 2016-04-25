@@ -48,15 +48,10 @@ SubShader {
             offset += _Position;
             
             half4 res = tex2D(_MainTex, offset);
-            half4 neutral = tex2D(_MainTex, i.uv);
             //if (rad*_Distance<pow(2*_Rad/_Distance,0.5)*_Distance) {res.g+=0.2;} // verification of compliance with the Einstein radius
             if (rad*_Distance<_Rad){res.r=0;res.g=0;res.b=0;} // check radius BH
 
-            if (false) {
-            	return res;
-            }
-
-            return neutral;
+            return res;
         }
         ENDCG
 
