@@ -35,9 +35,9 @@
         
         float4 frag (v2f i) : COLOR
         {
-        	float _Rad = 2.5;
+        	float _Rad = 0.53;
         	float _Ratio = 1;
-        	float _Distance = 35;
+        	float _Distance = 5;
         	float2 _Position = (0.5, 0.5);
 
             float2 offset = i.uv - _Position; // We shift our pixel to the desired position
