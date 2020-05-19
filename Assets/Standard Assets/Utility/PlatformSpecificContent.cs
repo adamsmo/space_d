@@ -21,7 +21,6 @@ namespace UnityStandardAssets.Utility
         [SerializeField] private BuildTargetGroup m_BuildTargetGroup;
         [SerializeField] private GameObject[] m_Content = new GameObject[0];
         [SerializeField] private MonoBehaviour[] m_MonoBehaviours = new MonoBehaviour[0];
-        [SerializeField] private bool m_ChildrenOfThisObject;
 
 #if !UNITY_EDITOR
 	void OnEnable()
@@ -87,13 +86,6 @@ namespace UnityStandardAssets.Utility
                     {
                         g.SetActive(enabled);
                     }
-                }
-            }
-            if (m_ChildrenOfThisObject)
-            {
-                foreach (Transform t in transform)
-                {
-                    t.gameObject.SetActive(enabled);
                 }
             }
             if (m_MonoBehaviours.Length > 0)
